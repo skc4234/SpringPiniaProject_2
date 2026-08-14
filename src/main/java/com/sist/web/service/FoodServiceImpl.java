@@ -8,7 +8,12 @@ import com.sist.web.mapper.FoodMapper;
 import com.sist.web.vo.FoodVO;
 
 import lombok.RequiredArgsConstructor;
-
+/*
+ *   1. Mapper : 재료(데이터베이스만 연동)
+ *   2. Service : 쉐프(전체 요청 처리) => DB+OpenAPI
+ *   3. Controller     서빙(Router)
+ *   	RestController 음식 전달(값 전송)
+ */
 @Service
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {

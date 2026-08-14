@@ -14,7 +14,7 @@
 			parameterType="int">
 		SELECT no,name,address,poster
 		FROM food
-		ORDER BY no DESC
+		ORDER BY no ASC
 		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY		
 	</select>
 

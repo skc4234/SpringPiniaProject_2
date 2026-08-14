@@ -8,14 +8,29 @@ import java.util.*;
 import com.sist.web.vo.*;
 import com.sist.web.service.*;
 import lombok.RequiredArgsConstructor;
-
+/*
+ *   RestFul : 다른 프로그램과 연동
+ *   	=> JavaScript , Kotlin
+ *   	=> GET(SELECT) / POST(INSERT) / PUT(UPDATE) / DELETE(DELETE)
+ *   
+ *   클라이언트   |   서버
+ *   Vue           SpringFramework
+ *   React         Spring-Boot
+ *                 NodeJS
+ *                 Django / FastAPI
+ *                 ASP.NET
+ *                 
+ *                 
+ *   @RequestBody : JSON => Java (Vue,React)
+ *   @ModelAttribute : VO => Java (ThymeLeaf)
+ */
 @RestController
 @RequiredArgsConstructor
 public class FoodRestController {
 	private final FoodService fService;
 	
-	@GetMapping("/food/list")
-	public ResponseEntity<Map> food_list(
+	@GetMapping("/food/list_vue")
+	public ResponseEntity<Map> food_list_vue(
 			@RequestParam(value = "page",required = false) String page){
 		Map map=new HashMap();
 		try {
@@ -23,7 +38,11 @@ public class FoodRestController {
 			List<FoodVO> list=fService.foodListData(Integer.parseInt(page));
 			int[] pages=fService.foodPages(Integer.parseInt(page));
 			map.put("list", list);
-			map.put("pages", pages);
+			//map.put("pages", pages);
+			map.put("curpage", pages[0]);
+			map.put("totalpage", pages[1]);
+			map.put("startpage", pages[2]);
+			map.put("endpage", pages[3]);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().build();
