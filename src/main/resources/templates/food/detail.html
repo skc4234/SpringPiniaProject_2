@@ -3,13 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script>
+const NO=/*[[${no}]]*/ 0
+</script>
 </head>
-
 <body>
 <div class="container">
 	<div class="row">
-		<h3>상세보기 [[${no}]]</h3>
+		<h3>상세보기</h3>
 	</div>
 </div>
+<script src="/vue/axios.js"></script>
+<script src="/vue/food/foodStore.js"></script>
+<script>
+	const {createApp,onMounted}=Vue
+	const {createPinia}=Pinia
+	const foodApp=createApp({
+		setup(){
+			const store=userFoodStore()
+			onMounted({
+				
+			})
+		}
+	})
+	foodApp.use(createPinia())
+	foodApp.mount('.container')
+</script>
 </body>
 </html>

@@ -49,4 +49,18 @@ public class FoodRestController {
 		}
 		return ResponseEntity.ok(map);
 	}
+	
+	@GetMapping("/food/detail_vue")
+	public ResponseEntity<Map> food_detail_vue(
+			@RequestParam("no") int no){
+		Map map=new HashMap();
+		try {
+			FoodVO vo=fService.foodDetailData(no);
+			map.put("vo", vo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
+		}
+		return ResponseEntity.ok(map);
+	}
 }
