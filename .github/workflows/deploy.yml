@@ -1,0 +1,41 @@
+name: Deploy Git Action
+# 언제부터 배포 시작 = master에서 push할때마다 배포
+on:
+  push:
+    branches:
+      - main
+# 작업 지시 
+jobs:
+  deploy:
+    runs-on: self-hosted #현재 Ubuntu에 배포 
+    #어떤 순서로 진행할지 
+    steps:
+      # 소스 코드 다운로드 = clone과 동일 
+      - uses: actions/checkout@v4
+      # JDK 21버전 확인 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      # gradlew 권한 부여
+      - run: chmod +x gradlew
+      # 빌드 
+      - run: ./gradlew clean build -x test
+      # Docker Image 생성
+      - run: docker build -t mini-app .
+      # 기존의 docker process 중지/삭제
+      - run: |
+          docker stop mini-app || true
+          docker rm mini-app || true
+      # 새로운 Docker Container 실행
+      - run: |
+          docker run --name mini-app -it -d -p 8080:8080 mini-app
+      # 실행(일반 java) => jar파일 생성 => java -jar app.jar
+      #- run: |
+      #    PID=$(lsof -t -i:8080 || true)
+      #    if [ -n "$PID" ]; then
+      #       kill -15 "$PID" || true
+      #    fi
+      #- run: nohup java -jar build/libs/*0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+        env:
+         RUNNER_TRACKING_ID: ""
