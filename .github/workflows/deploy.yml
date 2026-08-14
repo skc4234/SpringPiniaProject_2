@@ -17,19 +17,30 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      # 환경 설정
+      - run: |
+          echo "==================="
+          echo "환경변수 설정"
+          echo "==================="
+          rm -f .env
+          touch .env
+          echo "DB_URL=${{secrets.DB_URL}}">> .env
+          echo "DB_USERNAME=${{secrets.DB_USERNAME}}">> .env
+          echo "DB_PASSWORD=${{secrets.DB_PASSWORD}}">> .env
+          echo ".env 완료"
       # gradlew 권한 부여
       - run: chmod +x gradlew
       # 빌드 
       - run: ./gradlew clean build -x test
       # Docker Image 생성
-      - run: docker build -t mini-app .
+      - run: docker build -t food-app .
       # 기존의 docker process 중지/삭제
       - run: |
-          docker stop mini-app || true
-          docker rm mini-app || true
+          docker stop food-app || true
+          docker rm food-app || true
       # 새로운 Docker Container 실행
       - run: |
-          docker run --name mini-app -it -d -p 8080:8080 mini-app
+          docker run --name food-app -d --env-file .env -p 8080:8080 food-app
       # 실행(일반 java) => jar파일 생성 => java -jar app.jar
       #- run: |
       #    PID=$(lsof -t -i:8080 || true)
