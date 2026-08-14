@@ -40,7 +40,7 @@ jobs:
           docker rm food-app || true
       # 새로운 Docker Container 실행
       - run: |
-          docker run --name food-app -d --env-file .env -p 8080:8080 food-app
+          docker run --name food-app -d --env-file .env -p 9090:9090 food-app
       # 실행(일반 java) => jar파일 생성 => java -jar app.jar
       #- run: |
       #    PID=$(lsof -t -i:8080 || true)
