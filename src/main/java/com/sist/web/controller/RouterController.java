@@ -21,4 +21,9 @@ public class RouterController {
 		model.addAttribute("main_html","food/detail");
 		return "main/main";
 	}
+	
+	@GetMapping("/member/login")
+	public String member_login() {
+		return "member/login";
+	}
 }
