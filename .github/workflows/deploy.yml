@@ -43,7 +43,7 @@ jobs:
       # 기존 컨테이너 종료
       - run: docker compose down
       # 최신 Docker pull
-      - run: docker compose pull
+      - run: docker compose pull ${{secrets.DOCKER_USERNAME}}/pinia-app
       # Docker Container 실행
       - run: docker compose up -d
         env:
