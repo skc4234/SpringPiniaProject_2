@@ -33,14 +33,14 @@ jobs:
       # 빌드 
       - run: ./gradlew clean build -x test
       # Docker Image 생성
-      - run: docker build -t food-app .
+      - run: docker build -t pinia-app .
       # 기존의 docker process 중지/삭제
       - run: |
-          docker stop food-app || true
-          docker rm food-app || true
+          docker stop pinia-app || true
+          docker rm pinia-app || true
       # 새로운 Docker Container 실행
       - run: |
-          docker run --name food-app -d --env-file .env -p 9090:9090 food-app
+          docker run --name pinia-app -d --env-file .env -p 9090:9090 pinia-app
       # 실행(일반 java) => jar파일 생성 => java -jar app.jar
       #- run: |
       #    PID=$(lsof -t -i:8080 || true)
