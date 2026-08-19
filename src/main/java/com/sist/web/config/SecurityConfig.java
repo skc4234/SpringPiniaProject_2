@@ -88,15 +88,10 @@ public class SecurityConfig {
 				  .successHandler(loginSuccessHandler)
 				  .failureHandler(loginFailHandler)
 				  .permitAll())
-		  .rememberMe(remember->remember
-				  .key("my-secret-key")
-				  .rememberMeParameter("remember-me")
-				  .tokenValiditySeconds(60*60*24))
 		  .logout(logout->logout
 				  .logoutUrl("/member/logout")
 				  .logoutSuccessUrl("/")
-				  .invalidateHttpSession(true)
-				  .deleteCookies("remember-me","JSESSIONID"));
+				  .invalidateHttpSession(true));
 		// remember-me
 		return http.build();
 		
@@ -105,8 +100,6 @@ public class SecurityConfig {
 	
 	// 인증 관리자
 	/*
-	 *   
-	 */
 	@Bean
 	public AuthenticationManager authenticationManager(
 			HttpSecurity http,BCryptPasswordEncoder passwordEncoder)
@@ -121,9 +114,6 @@ public class SecurityConfig {
 	
 
 	// 비밀번호 암호화
-	/*
-	 *  
-	 */
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -131,11 +121,9 @@ public class SecurityConfig {
 	
 
 	// PersistentLogins 등록
-	/*
-	 * 
-	 */
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		return null;
 	}
+	*/
 }
