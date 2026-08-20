@@ -12,34 +12,47 @@
 </head>
 <body>
 <div class="container">
-	<div class="row">
-		<h3>Login</h3>
-		<table class="table">
-			<tbody>
-				<tr>
-					<th width="20%" class="text-center">ID</th>
-					<td width="80%">
-						<input type="text" name="userid" size="20" class="input-sm">
-					</td>
-				</tr>
-				<tr>
-					<th width="20%" class="text-center">PW</th>
-					<td width="80%">
-						<input type="password" name="userpwd" size="20" class="input-sm">
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="text-center">
-						<button type="submit" class="btn btn-sm btn-success">로그인</button>
-						<button type="button" class="btn btn-sm btn-danger"
-								onclick="javascript:history.back()">
-							취소
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
+    <div class="row">
+      <h3>Login</h3>
+       <form action="/member/login_process" method="post">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th width=20% class="text-center">ID</th>
+            <td width=80%>
+             <input type=text name=userid size=20 
+                class="input-sm">
+            </td>
+          </tr>
+          <tr>
+            <th width=20% class="text-center">PW</th>
+            <td width=80%>
+             <input type=password name=userpwd size=20 
+                class="input-sm">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="text-center">
+              <button class="btn-sm btn-danger" type="submit">로그인</button>
+              <button class="btn-sm btn-primary" type="button"
+                onclick="javascript:history.back()"
+              >취소</button>
+            </td>
+          </tr>
+          <tr>
+              <td colspan="2">
+                 <input type="checkbox" name="remember-me">자동 로그인
+               </td>
+          </tr>
+          <tr>
+             <td colspan="2" style="color:red">
+                [[${message }]]
+             </td>
+          </tr>
+        </tbody>
+      </table>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
