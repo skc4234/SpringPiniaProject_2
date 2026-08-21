@@ -3,8 +3,10 @@ import java.util.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -59,6 +61,42 @@ public class CommentRestController {
 			vo.setId(id);
 			vo.setName(name);
 			cService.commentInsert(vo);
+			map=commonsData(vo.getPage(), vo.getFno());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
+		}
+		return ResponseEntity.ok(map);
+	}
+	
+	// 삭제
+	@DeleteMapping("/comment/delete_vue")
+	public ResponseEntity<Map> comment_delete_vue(
+			//@RequestBody CommentVO vo
+			@RequestParam("no") int no,
+			@RequestParam("page") int page,
+			@RequestParam("fno") int fno
+			){
+		Map map=new HashMap();
+		try {
+			//cService.commentDelete(vo.getNo());
+			//map=commonsData(vo.getPage(), vo.getFno());
+			cService.commentDelete(no);
+			map=commonsData(page, fno);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
+		}
+		return ResponseEntity.ok(map);
+	}
+	
+	// 수정
+	@PutMapping("/comment/update_vue")
+	public ResponseEntity<Map> comment_update_vue(
+			@RequestBody CommentVO vo){
+		Map map=new HashMap();
+		try {
+			cService.commentUpdate(vo);
 			map=commonsData(vo.getPage(), vo.getFno());
 		} catch (Exception e) {
 			e.printStackTrace();

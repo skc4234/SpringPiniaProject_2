@@ -10,10 +10,19 @@
 	margin: 0px auto;
 	width: 800px;
 }
+.btn-xs {
+	margin-left: 3px
+}
+.a-link {
+	cursor: pointer;
+}
 </style>
-<!-- <script>
-const NO=/*[[${no}]]*/ 0
-</script> -->
+<script th:inline="javascript">
+const NO=/*[[${vo.no}]]*/ 0
+const SESSION_ID=/*[[${session.userid}]]*/ ''
+//console.log("NO="+NO)
+//console.log("SESSION_ID="+SESSION_ID)
+</script>
 </head>
 <body>
 <div class="container">
@@ -110,11 +119,114 @@ const NO=/*[[${no}]]*/ 0
 		</table>
 	</div>
 	<div class="row" style="margin-top: 10px" id="commentId">
-		
+		<table class="table" v-if="store.count===0">
+		  <tbody>
+			<tr>
+			  <td class="text-center">
+			  	<h3>댓글이 없습니다</h3>
+			  </td>
+			</tr>
+		  </tbody>
+		</table>
+		<table class="table" v-if="store.count>0">
+		  <tbody>
+			<tr>
+			  <td class="text-center">
+			  	<table class="table" v-for="(rvo,index) in store.rList" :key="index">
+			  	  <tbody>
+			  	  	<tr>
+			  	  	  <td width="80%" class="text-left">
+			  	  	  	◑ {{rvo.name}} &nbsp;{{rvo.dbday}}
+			  	  	  </td>
+			  	  	  <td width="20%" class="text-right" v-if="store.sessionId===rvo.id">
+			  	  	  	<a class="a-link btn btn-xs btn-info"
+			  	  	  		@click="store.toggleReply(rvo.no,rvo.msg)">
+			  	  	  		{{store.upReplyNo===rvo.no?'취소':'수정'}}
+			  	  	  	</a>
+			  	  	  	<a class="a-link btn btn-xs btn-warning"
+			  	  	  		@click="store.commentDelete(rvo.no)">삭제</a>
+			  	  	  </td>
+			  	  	</tr>
+			  	  	<tr>
+			  	  	  <td colspan="2" style="white-space: pre-wrap;" class="text-left">
+			  	  	  	{{rvo.msg}}
+			  	  	  </td>
+			  	  	</tr>
+			  	  	<tr v-if="store.upReplyNo===rvo.no">
+			  	  	  <td colspan="2">
+			  	  	  	<textarea rows="5" cols="95" style="float: left"
+			       			v-model="store.updateMsg[rvo.no]"></textarea>
+		        		<button class="btn btn-sm btn-primary" style="font-size:1em; width:72px; height:106px; float: right"
+			       			@click="store.commentUpdate(rvo.no)">
+		           			수정
+		        		</button>
+			  	  	  </td>
+			  	  	</tr>
+			  	  </tbody>
+			  	</table>
+			  	<table class="table">
+			  	  <tbody>
+			  	  	<tr>
+			  	  	  <td class="text-center">
+			  	  	    <a class="a-link btn btn-sm btn-primary"
+			  	  	    	v-if="store.curpage>1"
+			  	  	    	@click="store.move(store.curpage-1)">이전</a>
+			  	  	  	{{store.curpage}} page / {{store.totalpage}} pages
+			  	  	    <a class="a-link btn btn-sm btn-primary"
+			  	  	    	v-if="store.curpage<store.totalpage"
+			  	  	    	@click="store.move(store.curpage+1)">다음</a>
+			  	  	  </td>
+			  	  	</tr>
+			  	  </tbody>
+			  	</table>
+			  </td>
+			</tr>
+		  </tbody>
+		</table>
+		<table class="table" sec:authorize="isAuthenticated()">
+		  <tbody>
+		    <tr>
+			  <td>
+				<textarea rows="5" cols="97" style="float: left"
+			       ref="msgRef" v-model="store.msg"></textarea>
+		        <button class="btn btn-sm btn-info" style="font-size:1em; width:75px; height:106px; float: right"
+			       @click="store.commentInsert(msgRef)">
+		           등록
+		        </button>
+			  </td>
+			</tr>
+		  </tbody>
+		</table>
 	</div>
 </div>
 <script src="/vue/axios.js"></script>
 <script src="/vue/comment/commentStore.js"></script>
+<script>
+	const {createApp,ref,onMounted}=Vue
+	const {createPinia}=Pinia
+	const commentApp=createApp({
+		setup(){
+			// 1. store를 가지고 온다
+			const store=userCommentStore()
+			
+			// 2. ref 초기화
+			const msgRef=ref(null)
+			
+			// 3. 시작과 동시에 데이터 읽기
+			onMounted(()=>{
+				store.sessionId=SESSION_ID
+				store.commentListData(NO)
+			})
+			
+			// 4. HTML에서 사용 가능하게 변수 return
+			return {
+				store
+			}
+		}
+	})
+	commentApp.use(createPinia())
+	commentApp.mount('#commentId')
+</script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
@@ -151,25 +263,8 @@ geocoder.addressSearch('[[${vo.address}]]', function(result, status) {
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
     } 
-});    
+});
 </script>
-<!-- <script>
-	const {createApp,onMounted}=Vue
-	const {createPinia}=Pinia
-	const commentApp=createApp({
-		setup(){
-			const store=userCommentStore()
-			onMounted(()=>{
-				store.commentListData()
-			})
-			return {
-				store
-			}
-		}
-	})
-	commentApp.use(createPinia())
-	commentApp.mount('.container')
-</script> -->
 <!-- 
 <script src="/vue/food/foodStore.js"></script>
 <script>

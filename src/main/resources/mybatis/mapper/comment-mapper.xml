@@ -15,4 +15,13 @@
 		INSERT INTO piniacomment
 		VALUES(pc_no_seq.nextval,#{fno},#{id},#{name},#{msg},SYSDATE)
 	</insert>
+	<delete id="commentDelete" parameterType="int">
+		DELETE FROM piniacomment
+		WHERE no=#{no}
+	</delete>
+	<update id="commentUpdate" parameterType="com.sist.web.vo.CommentVO">
+		UPDATE piniacomment
+		SET msg=#{msg}
+		WHERE no=#{no}
+	</update>
 </mapper>
